@@ -1,5 +1,7 @@
 // Talks to the SpeedCap API. Set VITE_API_URL in .env (see .env.example).
-export const API_URL = (import.meta.env?.VITE_API_URL || "http://localhost:8080").replace(/\/$/, "");
+// When it isn't set, production builds call the API on the same site (as on Vercel).
+const env = import.meta.env || {};
+export const API_URL = (env.VITE_API_URL ?? (env.DEV ? "http://localhost:8080" : "")).replace(/\/$/, "");
 
 async function request(path, options) {
   let res;

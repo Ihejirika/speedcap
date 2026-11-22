@@ -4,7 +4,8 @@ import { dirname } from "node:path";
 import { AREAS, NETWORKS } from "./networks.js";
 import { boundingBox, distanceKm } from "./geo.js";
 
-const DB_PATH = process.env.DATABASE_PATH || "./data/speedcap.db";
+// On Vercel only /tmp is writable, and it is cleared when the function restarts.
+const DB_PATH = process.env.DATABASE_PATH || (process.env.VERCEL ? "/tmp/speedcap.db" : "./data/speedcap.db");
 if (DB_PATH !== ":memory:") mkdirSync(dirname(DB_PATH), { recursive: true });
 
 export const db = new DatabaseSync(DB_PATH);

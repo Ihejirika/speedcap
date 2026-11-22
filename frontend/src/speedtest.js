@@ -35,7 +35,7 @@ export async function measureDownload({ seconds = 8, streams = 4, onProgress, si
 
   const run = async () => {
     while (now() < stopAt && !ctrl.signal.aborted) {
-      const res = await fetch(`${API_URL}/api/speedtest/download?bytes=${12 * 1024 * 1024}&r=${Math.random()}`, {
+      const res = await fetch(`${API_URL}/api/speedtest/download?bytes=${4 * 1024 * 1024}&r=${Math.random()}`, {
         cache: "no-store",
         signal: ctrl.signal,
       });

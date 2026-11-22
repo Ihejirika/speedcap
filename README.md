@@ -45,8 +45,10 @@ speedcap/
 │       ├── components/      Gauge, Rankings, MapView, LocationPicker
 │       ├── speedtest.js     Speed-test measurements
 │       └── api.js           API calls
-├── render.yaml              One-click backend deploy on Render
-└── .github/workflows/       GitHub Pages deploy and backend tests
+├── api/index.mjs            Vercel Function that serves the API
+├── vercel.json              Vercel build and routing
+├── render.yaml              Alternative: API on Render
+└── .github/workflows/       Backend tests
 ```
 
 ## Run it locally
@@ -69,28 +71,23 @@ Run the backend tests with `npm test` inside `backend`.
 
 ## Deploy
 
-The web app goes on GitHub Pages and the API goes on Render, both free.
+### Vercel (how the live site runs)
 
-### 1. Deploy the API on Render
+The web app and the API deploy together as one Vercel project. `vercel.json` builds the frontend and sends
+every `/api/*` request to `api/index.mjs`, which runs the same API code as `backend/`.
 
-1. Sign in at [render.com](https://render.com) with GitHub.
-2. Click **New**, then **Blueprint**, and choose this repository. Render reads `render.yaml`.
-3. When it's live, copy the address, for example `https://speedcap-api.onrender.com`.
-4. Open `https://<your-api>/api/health` to check it says `"ok": true`.
+1. In Vercel, click **Add New > Project** and import this repository. Leave the settings as they are.
+2. Click **Deploy**. Every push to `main` redeploys automatically.
 
-On Render's free plan the API sleeps after 15 minutes without visitors, so the first visit after that takes
-about a minute. Shared results are also cleared when the service restarts. To keep them, use a paid plan with
-a disk (see the comments in `render.yaml`) or run the Docker image anywhere with a volume mounted at `/data`.
+Vercel's file system is temporary, so the SQLite database is rebuilt with sample data whenever a function
+starts fresh, and shared speed tests don't last. To keep them, connect a hosted database (for example Supabase
+or Turso) or run the API on a server with a disk.
 
-### 2. Deploy the web app on GitHub Pages
+### Run the API on its own server
 
-1. In this repo on GitHub, go to **Settings > Secrets and variables > Actions > Variables** and add a variable named `VITE_API_URL` with your Render address.
-2. Go to **Settings > Pages** and set **Source** to **GitHub Actions**.
-3. Go to **Actions**, open **Deploy frontend to GitHub Pages**, and click **Run workflow**. After that it redeploys on every push to `main`.
-4. Your site will be at `https://<your-username>.github.io/speedcap/`.
-
-Once the site is live, set `ALLOWED_ORIGINS` on Render to your Pages address (for example
-`https://ihejirika.github.io`) so only your site can call the API.
+`render.yaml` deploys the API on Render (New > Blueprint), and `backend/Dockerfile` runs it anywhere with a
+volume at `/data`. Then build the frontend with `VITE_API_URL` set to that server's address, and set
+`ALLOWED_ORIGINS` on the API to your site's address.
 
 ## API
 
