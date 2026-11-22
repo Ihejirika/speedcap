@@ -1,0 +1,26 @@
+# Render Blueprint for the SpeedCap API.
+# In Render: New > Blueprint, then pick this repository.
+services:
+  - type: web
+    name: speedcap-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: backend
+    buildCommand: echo "No dependencies to install"
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Your GitHub Pages address, e.g. https://ihejirika.github.io
+      - key: ALLOWED_ORIGINS
+        value: "*"
+      - key: SEED_SAMPLE_DATA
+        value: "true"
+    # On a paid plan, add a disk so shared results survive restarts:
+    # disk:
+    #   name: speedcap-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    # and set DATABASE_PATH=/var/data/speedcap.db
