@@ -74,7 +74,8 @@ Run the backend tests with `npm test` inside `backend`.
 ### Vercel (how the live site runs)
 
 The web app and the API deploy together as one Vercel project. `vercel.json` builds the frontend and sends
-every `/api/*` request to `api/index.mjs`, which runs the same API code as `backend/`.
+every `/api/*` request to `api/index.mjs`, which runs the same API code as `backend/`. The API runs in
+Vercel's Paris region (`cdg1`), the closest to Nigeria.
 
 1. In Vercel, click **Add New > Project** and import this repository. Leave the settings as they are.
 2. Click **Deploy**. Every push to `main` redeploys automatically.

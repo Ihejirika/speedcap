@@ -1,10 +1,21 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": [
+    "cdg1"
+  ],
   "installCommand": "cd frontend && npm install",
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/dist",
   "functions": {
-    "api/index.mjs": { "maxDuration": 30, "includeFiles": "backend/src/**" }
+    "api/index.mjs": {
+      "maxDuration": 30,
+      "includeFiles": "backend/src/**"
+    }
   },
-  "rewrites": [{ "source": "/api/(.*)", "destination": "/api/index.mjs" }]
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.mjs"
+    }
+  ]
 }
